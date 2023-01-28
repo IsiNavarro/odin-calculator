@@ -48,9 +48,15 @@ button{
     background-color: #ffb703;
     font-weight: bold;
 }
+button:hover{
+    scale: 105%;
+}
 .operand{
     background-color: white;
     color: #ffb703;
+}
+#ac{
+    grid-column: 4/6;
 }
 #factorial, #equal{
     color: white;

@@ -6,27 +6,39 @@ const dot = document.querySelector("#dot");
 const ac = document.querySelector("#ac");
 const operandList = ["+","-","*","**","/"];
 
+display.textContent = "";
+
 let lastOperand = true;
 let pressedDot = false; 
-let afterEqual = false;
+let shouldCleanScreen = false;
+
+
+function cleanQuestionMark(){
+    if (display.textContent.length > 17){
+        shouldCleanScreen = true;
+    }
+}
 
 numbersButtons.forEach(button => button.addEventListener("click", ()=> {
-    if (afterEqual) clearScreen();
+    cleanQuestionMark();
+    if (shouldCleanScreen) clearScreen();
     appendToDisplay(button.textContent);
 
     lastOperand = false;
-    afterEqual = false
+    shouldCleanScreen = false
 }));
 dot.addEventListener("click", ()=>{
-    if (afterEqual) clearScreen();
+    cleanQuestionMark();
+    if (shouldCleanScreen) clearScreen();
     if (!pressedDot){
         appendToDisplay(".");
         pressedDot = true;
-        afterEqual = false;
+        shouldCleanScreen = false;
     }
 })
 operandsButtons.forEach(button => button.addEventListener("click", ()=>{
-    if (afterEqual) clearScreen();
+    cleanQuestionMark();
+    if (shouldCleanScreen) clearScreen();
     if (lastOperand){
         if ((display.textContent == false) && (button.textContent == "-")){
             appendToDisplay(button.textContent);
@@ -45,7 +57,7 @@ ac.addEventListener("click", () => clearScreen());
 equal.addEventListener("click", ()=>{
     operate(display.textContent.trim())
 
-    afterEqual = true;
+    shouldCleanScreen = true;
 });
 
 function clearScreen(){
@@ -161,8 +173,8 @@ function operate(str){
             index -= 1; // deleted one element so length is now shorter. Need to readjust index.
         }
     }
-    
-    display.textContent = roundNumber(numbers[0], 4);
+    let result = roundNumber(numbers[0], 4)
+    display.textContent = result > 9999999 ? result.toExponential(4) : result;
 }
 
 function roundNumber(num, dec) {
